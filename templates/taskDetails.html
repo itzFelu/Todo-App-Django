@@ -4,7 +4,7 @@
 <table class="table table-hover border border-dark">
     <div class="d-flex justify-content-between m-3">
         <h3>Task Details:</h3>
-        <a href="/update_task/{{data.id}}"><button class="btn btn-warning">Update</button></a>
+        <a href="/update_task/{{data.id}}"><button class="btn btn-warning">Update Task Info</button></a>
     </div>
     <thead>
       <tr>
@@ -18,13 +18,12 @@
         <tr>
           <td>{{data.title}}</td>
           <td>{{data.description}}</td>
-          <td 
-            {% if data.status == 'Done' %}
-                style="color: green;"
-            {% else %}
-                style="color: red;"
-            {% endif %}
-            >{{data.status}}</td>
+          
+          {% if data.status == 'Done' %}
+            <td selected style="color: green" value='Done'>Done &#9989;</td>
+          {% else %}
+            <td selected style="color: red" value='Pending'>Pending &#10060;</td>
+          {% endif %}
           <td>{{data.dateTime}}</td>
         </tr>
     </tbody>

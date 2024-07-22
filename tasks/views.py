@@ -53,7 +53,7 @@ def taskList(request):
 
 def taskDetails(request,id):
     data=Tasks.objects.get(id=id)
-    return render(request,'taskDetails.html',context={'data':data})
+    return render(request,'taskDetails.html',context={'data':data,})
 
 def update_task(request,id):
     if request.method == 'POST':
@@ -62,7 +62,7 @@ def update_task(request,id):
             title=data['title'],
             description=data['description'],
         )
-        return render(request,'updateTask.html',context={'message':'success', 'data': data})
+        return render(request,'updateTask.html',context={'message':'success', 'data': data,})
     else:
         data=Tasks.objects.get(id=id)
         return render(request,'updateTask.html',context={'data':data})
@@ -76,7 +76,7 @@ def addTask(request):
             description=data['description'],
             status=False
         )
-        return render(request,'addTask.html',context={'message':'success'})
+        return render(request,'addTask.html',context={'message':'success', 'page': 'addTask',})
     else:
         context={
             'page': 'addTask',
@@ -88,3 +88,9 @@ def del_task(request,id):
     Tasks.objects.get(id = id).delete()
     
     return redirect('/')
+
+def del_all(request):
+    Tasks.objects.all().delete()
+    # print(request.META.HTTP_REFERER)
+    # print()
+    return redirect('/tasklist')

@@ -2,7 +2,10 @@
 {% block taskList %}
 
     <div class="container">
-        <h3 class="m-3">Detailed Task List</h3>
+      <div class="d-flex justify-content-between m-3">
+          <h3 class="m-3">Detailed Task List</h3>
+          <button class="btn btn-danger" onclick="del_all()">Delete All</button>
+        </div>
         <table class="table table-hover border border-dark">
             <thead>
               <tr>
@@ -20,13 +23,11 @@
                   <th scope="row">{{forloop.counter}}</th>
                   <td>{{obj.title}}</td>
                   <td>{{obj.description}}</td>
-                  <td 
                   {% if obj.status == 'Done' %}
-                    style="color: green;"
+                    <td selected style="color: green" value='Done'>Done &#9989;</td>
                   {% else %}
-                    style="color: red;"
+                  <td selected style="color: red" value='Pending'>Pending &#10060;</td>
                   {% endif %}
-                  >{{obj.status}}</td>
                   <td>{{obj.dateTime}}</td>
                   {% comment %} <td ><button class="btn  btn-danger" onclick=delete_task({{obj.id}})>Delete</button></td> {% endcomment %}
                 </tr>
@@ -35,6 +36,12 @@
             </tbody>
           </table>
     </div>
-
-    
+<script>
+  function del_all(){
+    console.log("clicked");
+    if(prompt("Type 'Delete All' to confirm") == 'Delete All'){
+        window.location.href='/deleteAll';
+    }
+}
+</script>
 {% endblock %}
