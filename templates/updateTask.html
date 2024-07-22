@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+{% block UpdateTask %}
+
+    <form class="add-task border border-dark p-5 mb-3" method="post">
+        {% csrf_token %}
+        {% if message == 'success' %}
+        <div class="alert alert-success" role="alert">
+            Task Updated Successfully
+          </div>
+        {% endif %}
+        <h3>Update Task</h3>
+        <div class="mb-3">
+            <label for="title" class="form-label">Task Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{data.title}}" required >
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Task description</label>
+            <textarea name="description" id="description" class="form-control" name="description">{{data.description}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+{% endblock %}

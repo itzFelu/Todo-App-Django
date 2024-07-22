@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% block taskDetails %}
+
+<table class="table table-hover border border-dark">
+    <div class="d-flex justify-content-between m-3">
+        <h3>Task Details:</h3>
+        <a href="/update_task/{{data.id}}"><button class="btn btn-warning">Update</button></a>
+    </div>
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Status</th>
+        <th scope="col">Time Of Creation</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{data.title}}</td>
+          <td>{{data.description}}</td>
+          <td 
+            {% if data.status == 'Done' %}
+                style="color: green;"
+            {% else %}
+                style="color: red;"
+            {% endif %}
+            >{{data.status}}</td>
+          <td>{{data.dateTime}}</td>
+        </tr>
+    </tbody>
+  </table>
+
+{% endblock %}

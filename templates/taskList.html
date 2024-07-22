@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% block taskList %}
+
+    <div class="container">
+        <h3 class="m-3">Detailed Task List</h3>
+        <table class="table table-hover border border-dark">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Time Of Creation</th> 
+                {% comment %} <th scope="col"></th>  {% endcomment %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in data %}
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{obj.title}}</td>
+                  <td>{{obj.description}}</td>
+                  <td 
+                  {% if obj.status == 'Done' %}
+                    style="color: green;"
+                  {% else %}
+                    style="color: red;"
+                  {% endif %}
+                  >{{obj.status}}</td>
+                  <td>{{obj.dateTime}}</td>
+                  {% comment %} <td ><button class="btn  btn-danger" onclick=delete_task({{obj.id}})>Delete</button></td> {% endcomment %}
+                </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+    </div>
+
+    
+{% endblock %}
