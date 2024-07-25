@@ -14,16 +14,18 @@
         .add-task-btn{
           background: gray;
           color: white;
+          text-decoration: underline;
         }
       {% elif page == 'taskList' %}
         .task-list{
           background: gray;
           color: white;
+          text-decoration: underline;
         }
       {% else %}
         .todo{
-          background: green;
-          color: white;
+          color: green;
+          text-decoration: underline;
         }
       {% endif %}
     </style>
@@ -32,9 +34,9 @@
 <body>
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid justify-content-start">
-            <button class="btn btn-outline-success me-2 todo">To-Do App</button>
-            <button class="btn btn-sm btn-outline-secondary m-3 add-task-btn">Add Task</button>
-            <button class="btn btn-sm btn-outline-secondary task-list">All TaskList</button>
+            <button class="btn me-2 todo" style="font-size: larger; font-weight: bolder;">To-Do List</button>
+            <button class="btn btn-sm  m-3 add-task-btn">Add Task</button>
+            <button class="btn btn-sm  task-list">All TaskList</button>
 
             {% comment %} <a href="/"><button class="btn btn-outline-success me-2 todo">Td-Do App</button></a>
             <a href="/addtask"><button class="btn btn-sm btn-outline-secondary m-3 add-task-btn">Add Task</button></a>
@@ -51,11 +53,11 @@
               <th scope="col"></th>
               <th scope="col">Task Name</th>
               <th scope="col">Status</th>
-              <th scope="col">Remove?</th>
+              
             </tr>
           </thead>
           <tbody>
-            {% for obj in data %}
+            {% for obj in data reversed %}
                 <tr>
                     <th scope="row" onclick=taskDetails({{obj.id}})>{{forloop.counter}}</th>
                     <td onclick=taskDetails({{obj.id}})>{{obj.title}}</td>
@@ -74,7 +76,6 @@
                         </select>
                       </form>
                     </td>
-                    <td><button class="btn  btn-danger del" onclick=delete_task({{obj.id}})>Delete</button></td>
                   </tr>
               {% endfor %}
           </tbody>
@@ -85,7 +86,6 @@
       {% block UpdateTask %} {% endblock %}
       {% block taskList %} {% endblock %}
       {% block taskDetails %} {% endblock %}
-      {% block del_all %} {% endblock %}
 
       
 

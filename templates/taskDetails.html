@@ -1,31 +1,48 @@
 {% extends 'index.html' %}
 {% block taskDetails %}
-
-<table class="table table-hover border border-dark">
+{% if message == 'success' %}
+    <div class="alert alert-success" role="alert">
+      Task Updated Successfully
+    </div>
+{% endif %}
+<table class="table border border-dark">
     <div class="d-flex justify-content-between m-3">
         <h3>Task Details:</h3>
         <a href="/update_task/{{data.id}}"><button class="btn btn-warning">Update Task Info</button></a>
     </div>
+    
     <thead>
       <tr>
+
         <th scope="col">Title</th>
         <th scope="col">Description</th>
         <th scope="col">Status</th>
         <th scope="col">Time Of Creation</th>
+        <th scope="col">Time Of Last Update</th> 
       </tr>
     </thead>
     <tbody>
-        <tr>
-          <td>{{data.title}}</td>
-          <td>{{data.description}}</td>
-          
-          {% if data.status == 'Done' %}
-            <td selected style="color: green" value='Done'>Done &#9989;</td>
-          {% else %}
-            <td selected style="color: red" value='Pending'>Pending &#10060;</td>
-          {% endif %}
-          <td>{{data.dateTime}}</td>
-        </tr>
+      <tr>
+        <td>{{data.title}}</td>
+        <td>{{data.description}}</td>
+        <td>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value={{data.id}}>
+            <select class=" btn border border-black" onchange="this.form.submit()" name="status">
+              {% if data.status == 'Done' %}
+                <option selected style="color: green" value='Done'>Done &#9989;</option>
+                <option style="color: red" value='Pending'>Pending &#10060;</option>
+              {% else %}
+              <option  style="color: green" value='Done'>Done &#9989;</option>
+              <option selected style="color: red" value='Pending'>Pending &#10060;</option>
+              {% endif %}
+            </select>
+          </form>
+        </td>
+        <td>{{data.dateTime}}</td>
+        <td> test </td>
+      </tr>
     </tbody>
   </table>
 
