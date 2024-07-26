@@ -5,7 +5,7 @@ document.querySelector('.add-task-btn').addEventListener('click',(e)=>{
 
 document.querySelector('.task-list').addEventListener('click',(e)=>{
     console.log("inside tasklist");
-    window.location.href='/tasklist';
+    window.location.href='/tasklist/All';
 })
 document.querySelector('.todo').addEventListener('click',(e)=>{
     window.location.href='/';

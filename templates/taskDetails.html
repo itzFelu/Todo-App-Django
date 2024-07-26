@@ -10,7 +10,6 @@
         <h3>Task Details:</h3>
         <a href="/update_task/{{data.id}}"><button class="btn btn-warning">Update Task Info</button></a>
     </div>
-    
     <thead>
       <tr>
 
@@ -40,8 +39,8 @@
             </select>
           </form>
         </td>
-        <td>{{data.dateTime}}</td>
-        <td> test </td>
+        <td>{{data.timeOf_creation}}</td>
+        <td> {{data.timeOf_last_update}} </td>
       </tr>
     </tbody>
   </table>

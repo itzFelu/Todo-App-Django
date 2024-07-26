@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Tasks
@@ -20,7 +21,7 @@ def index(request):
         return render(request,'index.html',context)
         # return HttpResponse("hello this is index page")
 
-def taskList(request):
+def taskList(request,filter):
     # print(request.path)
     if request.method == 'POST':
         data=request.POST
@@ -29,10 +30,15 @@ def taskList(request):
             status=data['status']
         )
         return redirect(request.path)
-    data= Tasks.objects.all()
+
+    if filter == 'All':
+        data= Tasks.objects.all()
+    else:
+        data=Tasks.objects.filter(status = filter)
     context={
         'page': 'taskList',
-        'data': data
+        'data': data,
+        'filter': filter,
     }
     return render(request,'taskList.html',context)
 
@@ -54,6 +60,7 @@ def update_task(request,id):
             title=data['title'],
             description=data['description'],
             status=data['status'],
+            timeOf_last_update=datetime.now()
         )
         data=Tasks.objects.filter(id=id)
         return render(request,'taskDetails.html',context={'message':'success', 'data': data[0],})
@@ -68,7 +75,6 @@ def addTask(request):
         Tasks.objects.create(
             title=data['title'],
             description=data['description'],
-            status=False
         )
         return render(request,'addTask.html',context={'message':'success', 'page': 'addTask',})
     else:
@@ -76,9 +82,28 @@ def addTask(request):
             'page': 'addTask',
         }
         return render(request,'addTask.html',context)
-    # return HttpResponse("hello this is add Task page")
 
+""" Deleting task directly from url, get request, no securities are there"""
+# need to know proper way of sending delete request
 def del_task(request,id):
     print(id)
     Tasks.objects.get(id = id).delete()
     return redirect('/')
+
+
+
+
+"""
+if 'filter' in data.keys():
+            filter=data['filter']
+            if filter=='All':
+                data= Tasks.objects.all()
+            else:
+                data= Tasks.objects.filter(status=filter)
+            context={
+                'page': 'taskList',
+                'data': data
+            }
+            return render(request,'taskList.html',context)
+        else:
+"""

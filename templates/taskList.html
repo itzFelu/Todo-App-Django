@@ -4,12 +4,24 @@
     <div class="container">
       <div class="d-flex justify-content-between m-3">
           <h3 class="m-3">Detailed Task List</h3>
+          
           <div style="margin: 20px 10px;">
             <label for="filter">Filter:</label>
-            <select name="filter" id="filter" class="btn border">
-              <option value="null" selected>All</option>
-              <option value="Done">Done</option>
-              <option value="Pending">Pending</option>
+            <select name="filter" id="filter" class="btn border" onchange="window.location.href=`/tasklist/${this.value}`">
+              {% if filter == 'All' %}
+                <option value="All" selected>All</option>
+                <option value="Done">Done</option>
+                <option value="Pending">Pending</option>
+              {% elif filter == 'Done' %}
+                <option value="All" >All</option>
+                <option value="Done" selected>Done</option>
+                <option value="Pending">Pending</option>
+              {% else %}
+                <option value="All" >All</option>
+                <option value="Done" >Done</option>
+                <option value="Pending" selected>Pending</option>
+              {% endif %}
+
             </select>
           </div>
 
@@ -48,20 +60,13 @@
                       </select>
                     </form>
                   </td>
-                  <td onclick=taskDetails({{obj.id}})>{{obj.dateTime}}</td>
-                  <td onclick=taskDetails({{obj.id}})> test </td>
+                  <td onclick=taskDetails({{obj.id}})>{{obj.timeOf_creation}}</td>
+                  <td onclick=taskDetails({{obj.id}})> {{obj.timeOf_last_update}} </td>
                 </tr>
               {% endfor %}
 
             </tbody>
           </table>
     </div>
-<script>
-  function del_all(){
-    console.log("clicked");
-    if(prompt("Type 'Delete All' to confirm") == 'Delete All'){
-        window.location.href='/deleteAll';
-    }
-}
-</script>
+
 {% endblock %}
