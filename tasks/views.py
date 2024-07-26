@@ -8,7 +8,8 @@ def index(request):
         data=request.POST
         print(data['status']+" "+data['id'])
         Tasks.objects.filter(id=data['id']).update(
-            status=data['status']
+            status=data['status'],
+            timeOf_last_update=datetime.now(),
         )
         return redirect('/')
     else:
@@ -27,7 +28,8 @@ def taskList(request,filter):
         data=request.POST
         print(data['status']+" "+data['id'])
         Tasks.objects.filter(id=data['id']).update(
-            status=data['status']
+            status=data['status'],
+            timeOf_last_update=datetime.now(),
         )
         return redirect(request.path)
 
@@ -47,7 +49,8 @@ def taskDetails(request,id):
         data=request.POST
         print(data['status']+" "+data['id'])
         Tasks.objects.filter(id=data['id']).update(
-            status=data['status']
+            status=data['status'],
+            timeOf_last_update=datetime.now(),
         )
         return redirect(request.path)
     data=Tasks.objects.get(id=id)
