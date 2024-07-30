@@ -44,7 +44,7 @@
                 <tr>
                   <th scope="row" onclick=taskDetails({{obj.id}})>{{forloop.counter}}</th>
                   <td onclick=taskDetails({{obj.id}})>{{obj.title}}</td>
-                  <td onclick=taskDetails({{obj.id}})>{{obj.description}}</td>
+                  <td onclick=taskDetails({{obj.id}})><pre>{{obj.description}}</pre></td>
                   <td>
                     <form method="post">
                       {% csrf_token %}
