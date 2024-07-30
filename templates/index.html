@@ -42,7 +42,7 @@
             <div class="d-flex flex-column pl-5">
               {% if request.user.is_authenticated %}
                 <p >Welcome, <i>{{request.user.first_name}}</i></p>
-                <a href="/logout" class="align-self-end"><button class="btn btn-sm btn-warning ">logout</button></a>
+                <a href="/logout" class="align-self-end"><button class="btn btn-sm btn-dark ">logout</button></a>
               {% endif %}
             </div>
 

@@ -130,8 +130,8 @@ def update_task(request,id):
             status=data['status'],
             timeOf_last_update=datetime.now()
         )
-        data=Tasks.objects.filter(id=id)
-        return render(request,'taskDetails.html',context={'message':'success', 'data': data[0],})
+        messages.success(request,'Task Updated successfully')
+        return redirect(f"/taskDetails/{id}")
     else:
         data=Tasks.objects.get(id=id)
         return render(request,'updateTask.html',context={'data':data})
@@ -146,7 +146,8 @@ def addTask(request):
             description=data['description'],
             created_by=request.user,
         )
-        return render(request,'addTask.html',context={'message':'success', 'page': 'addTask',})
+        messages.success(request,'Task added successfully')
+        return redirect('/addtask')
     else:
         context={
             'page': 'addTask',
