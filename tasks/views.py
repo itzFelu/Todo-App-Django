@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Tasks
+from .models import Tasks, Activity_log
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -17,15 +17,23 @@ def login_page(request):
         if not User.objects.filter(email=email):
             message="no user with this email!"
             messages.error(request,message)
-            print(message)
+            # print(message)
             return redirect('/login')
         user=authenticate(username=email, password=password)
         if user is None:
             message='Invalid password, please try again'
             messages.error(request,message)
-            print(message)
+            # print(message)
+            Activity_log.objects.create(
+                nameOf_action_performed="somebody tried to login",
+                performed_by= User.objects.get(username=email)
+            )
             return redirect('/login')
         login(request,user)
+        Activity_log.objects.create(
+            nameOf_action_performed="user logged in",
+            performed_by= user
+        )
         return redirect('/')
     return render(request,'login.html')
     
@@ -53,6 +61,10 @@ def register_page(request):
         )
         user.set_password(password)
         user.save()
+        Activity_log.objects.create(
+            nameOf_action_performed="New user created",
+            performed_by= user
+        )
         messages.success(request,'User created successfully, please login now')
         return redirect('/register')
 
@@ -61,6 +73,10 @@ def register_page(request):
 
 @login_required(login_url='/login/')
 def logout_page(request):
+    Activity_log.objects.create(
+            nameOf_action_performed="user logged out",
+            performed_by= request.user
+        )
     logout(request)
     return redirect('/login')
 
@@ -72,6 +88,18 @@ def index(request):
         Tasks.objects.filter(id=data['id']).update(
             status=data['status'],
             timeOf_last_update=datetime.now(),
+        )
+        task=Tasks.objects.get(id=data['id'])
+        Activity_log.objects.create(
+            nameOf_action_performed="Task status updated",
+            performed_by= request.user,
+
+            task_id=task.id,
+            title=task.title,
+            description=task.description,
+            status= task.status,
+            timeOf_creation= task.timeOf_creation ,
+            timeOf_last_update= task.timeOf_last_update,
         )
         return redirect('/')
     else:
@@ -93,6 +121,18 @@ def taskList(request,filter):
         Tasks.objects.filter(id=data['id']).update(
             status=data['status'],
             timeOf_last_update=datetime.now(),
+        )
+        task=Tasks.objects.get(id=data['id'])
+        Activity_log.objects.create(
+            nameOf_action_performed="Task status updated",
+            performed_by= request.user,
+
+            task_id=task.id,
+            title=task.title,
+            description=task.description,
+            status= task.status,
+            timeOf_creation= task.timeOf_creation ,
+            timeOf_last_update= task.timeOf_last_update,
         )
         return redirect(request.path)
 
@@ -116,6 +156,18 @@ def taskDetails(request,id):
             status=data['status'],
             timeOf_last_update=datetime.now(),
         )
+        task=Tasks.objects.get(id=data['id'])
+        Activity_log.objects.create(
+            nameOf_action_performed="Task status updated",
+            performed_by= request.user,
+
+            task_id=task.id,
+            title=task.title,
+            description=task.description,
+            status= task.status,
+            timeOf_creation= task.timeOf_creation ,
+            timeOf_last_update= task.timeOf_last_update,
+        )
         return redirect(request.path)
     data=Tasks.objects.get(id=id, created_by=request.user)
     return render(request,'taskDetails.html',context={'data':data,})
@@ -130,6 +182,18 @@ def update_task(request,id):
             status=data['status'],
             timeOf_last_update=datetime.now()
         )
+        task=Tasks.objects.get(id=id)
+        Activity_log.objects.create(
+            nameOf_action_performed="Task details updated",
+            performed_by= request.user,
+
+            task_id=task.id,
+            title=task.title,
+            description=task.description,
+            status= task.status,
+            timeOf_creation= task.timeOf_creation ,
+            timeOf_last_update= task.timeOf_last_update,
+        )
         messages.success(request,'Task Updated successfully')
         return redirect(f"/taskDetails/{id}")
     else:
@@ -141,10 +205,22 @@ def addTask(request):
     if request.method == "POST":
         data = request.POST
         # print(data['title']+"meoww "+data['description'])
-        Tasks.objects.create(
+        task= Tasks.objects.create(
             title=data['title'],
             description=data['description'],
             created_by=request.user,
+        )
+        
+        Activity_log.objects.create(
+            nameOf_action_performed="new Task created",
+            performed_by= request.user,
+
+            task_id=task.id,
+            title=task.title,
+            description=task.description,
+            status= task.status,
+            timeOf_creation= task.timeOf_creation ,
+            timeOf_last_update= task.timeOf_last_update,
         )
         messages.success(request,'Task added successfully')
         return redirect('/addtask')
@@ -158,9 +234,22 @@ def addTask(request):
 # need to know proper way of sending delete request
 @login_required(login_url='/login/')
 def del_task(request,id):
-    print(id)
-    Tasks.objects.get(id = id).delete()
-    return redirect('/')
+    task=Tasks.objects.get(id=id)
+    # Tasks.objects.get(id = id).delete()
+    Activity_log.objects.create(
+            nameOf_action_performed="Task deleted",
+            performed_by= request.user,
+
+            task_id=task.id,
+            title=task.title,
+            description=task.description,
+            status= task.status,
+            timeOf_creation= task.timeOf_creation ,
+            timeOf_last_update= task.timeOf_last_update,
+        )
+    task.delete()
+    messages.success(request,'task deleted')
+    return redirect('/tasklist/All')
 
 
 
