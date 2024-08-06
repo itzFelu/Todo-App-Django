@@ -67,12 +67,12 @@
           <tbody>
             {% for obj in data reversed %}
                 <tr>
-                    <th scope="row" onclick=taskDetails({{obj.id}})>{{forloop.counter}}</th>
-                    <td onclick=taskDetails({{obj.id}})>{{obj.title}}</td>
+                    <th scope="row" onclick=taskDetails({{obj.task_id}})>{{forloop.counter}}</th>
+                    <td onclick=taskDetails({{obj.task_id}})>{{obj.title}}</td>
                     <td>
                       <form method="post">
                         {% csrf_token %}
-                        <input type="hidden" name="id" value={{obj.id}}>
+                        <input type="hidden" name="task_id" value={{obj.task_id}}>
                         <select class=" btn border border-black" onchange="this.form.submit()" name="status">
                           {% if obj.status == 'Done' %}
                             <option selected style="color: green" value='Done'>Done &#9989;</option>
