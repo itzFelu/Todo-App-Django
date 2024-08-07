@@ -44,3 +44,8 @@ class User_log(models.Model):
 
     action=models.TextField()
     timeOf_action= models.DateTimeField(default=datetime.datetime.now())
+
+class Session_time(models.Model):
+    session_id= models.BigAutoField(primary_key=True)
+    user=models.ForeignKey(User,on_delete=models.DO_NOTHING)
+    duration= models.IntegerField()
