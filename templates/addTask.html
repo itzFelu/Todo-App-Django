@@ -3,10 +3,12 @@
 
     <form class="add-task border border-dark p-5 mb-3" method="post">
         {% csrf_token %}
-        {% if message == 'success' %}
-        <div class="alert alert-success" role="alert">
-            Task Added Successfully
-          </div>
+        {% if messages %}
+            <div class="alert alert-success" role="alert">
+                {% for message in messages %}
+                    {{message}}    
+                {% endfor %}
+            </div>
         {% endif %}
         <h3>Add New Task</h3>
         <div class="mb-3">

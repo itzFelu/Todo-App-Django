@@ -3,11 +3,7 @@
 
     <form class="add-task border border-dark p-5 mb-3" method="post">
         {% csrf_token %}
-        {% if message == 'success' %}
-        <div class="alert alert-success" role="alert">
-            Task Updated Successfully
-          </div>
-        {% endif %}
+        
         <h3>Update Task</h3>
         <div class="mb-3">
             <label for="title" class="form-label">Task Title</label>
@@ -17,7 +13,23 @@
             <label for="description" class="form-label">Task description</label>
             <textarea name="description" id="description" class="form-control" name="description">{{data.description}}</textarea>
         </div>
+        <div class="mb-3">
+            <label for="status">Status: </label>
+            <select class=" btn border" name="status" id="status">
+                {% if data.status == 'Done' %}
+                    <option selected style="color: green" value='Done'>Done &#9989;</option>
+                    <option style="color: red" value='Pending'>Pending &#10060;</option>
+                {% else %}
+                    <option  style="color: green" value='Done'>Done &#9989;</option>
+                    <option selected style="color: red" value='Pending'>Pending &#10060;</option>
+                {% endif %}
+            </select>
+        </div>
+        <br><br><br>
         <button type="submit" class="btn btn-primary">Update</button>
+        <a onclick="delete_task({{data.task_id}})" href="#" class="m-2">Delete</a>
+        <a href={% url "taskDetails" data.task_id %} class="m-2">Back</a>
+        {% comment %} <button type="submit" class="btn btn-danger">Delete Task</button> {% endcomment %}
     </form>
 
 {% endblock %}

@@ -2,9 +2,36 @@
 {% block taskList %}
 
     <div class="container">
+      {% if messages %}
+          <div class="alert alert-success" role="alert">
+              {% for message in messages %}
+                  {{message}}    
+              {% endfor %}
+          </div>
+      {% endif %}
       <div class="d-flex justify-content-between m-3">
           <h3 class="m-3">Detailed Task List</h3>
-          <button class="btn btn-danger" onclick="del_all()">Delete All</button>
+          
+          <div style="margin: 20px 10px;">
+            <label for="filter">Filter:</label>
+            <select name="filter" id="filter" class="btn border" onchange="window.location.href=`/tasklist/${this.value}`">
+              {% if filter == 'All' %}
+                <option value="All" selected>All</option>
+                <option value="Done">Done</option>
+                <option value="Pending">Pending</option>
+              {% elif filter == 'Done' %}
+                <option value="All" >All</option>
+                <option value="Done" selected>Done</option>
+                <option value="Pending">Pending</option>
+              {% else %}
+                <option value="All" >All</option>
+                <option value="Done" >Done</option>
+                <option value="Pending" selected>Pending</option>
+              {% endif %}
+
+            </select>
+          </div>
+
         </div>
         <table class="table table-hover border border-dark">
             <thead>
@@ -14,34 +41,39 @@
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
                 <th scope="col">Time Of Creation</th> 
-                {% comment %} <th scope="col"></th>  {% endcomment %}
+                <th scope="col">Time Of Last Update</th> 
+                
               </tr>
             </thead>
+            
             <tbody>
-              {% for obj in data %}
+              {% for obj in data reversed %}
                 <tr>
-                  <th scope="row">{{forloop.counter}}</th>
-                  <td>{{obj.title}}</td>
-                  <td>{{obj.description}}</td>
-                  {% if obj.status == 'Done' %}
-                    <td selected style="color: green" value='Done'>Done &#9989;</td>
-                  {% else %}
-                  <td selected style="color: red" value='Pending'>Pending &#10060;</td>
-                  {% endif %}
-                  <td>{{obj.dateTime}}</td>
-                  {% comment %} <td ><button class="btn  btn-danger" onclick=delete_task({{obj.id}})>Delete</button></td> {% endcomment %}
+                  <th scope="row" onclick=taskDetails({{obj.task_id}})>{{forloop.counter}}</th>
+                  <td onclick=taskDetails({{obj.task_id}})>{{obj.title}}</td>
+                  <td onclick=taskDetails({{obj.task_id}})><pre>{{obj.description}}</pre></td>
+                  <td>
+                    <form method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="task_id" value={{obj.task_id}}>
+                      <select class=" btn border border-black" onchange="this.form.submit()" name="status">
+                        {% if obj.status == 'Done' %}
+                          <option selected style="color: green" value='Done'>Done &#9989;</option>
+                          <option style="color: red" value='Pending'>Pending &#10060;</option>
+                        {% else %}
+                        <option  style="color: green" value='Done'>Done &#9989;</option>
+                        <option selected style="color: red" value='Pending'>Pending &#10060;</option>
+                        {% endif %}
+                      </select>
+                    </form>
+                  </td>
+                  <td onclick=taskDetails({{obj.task_id}})>{{obj.timeOf_creation}}</td>
+                  <td onclick=taskDetails({{obj.itask_idd}})> {{obj.timeOf_last_update}} </td>
                 </tr>
               {% endfor %}
 
             </tbody>
           </table>
     </div>
-<script>
-  function del_all(){
-    console.log("clicked");
-    if(prompt("Type 'Delete All' to confirm") == 'Delete All'){
-        window.location.href='/deleteAll';
-    }
-}
-</script>
+
 {% endblock %}
